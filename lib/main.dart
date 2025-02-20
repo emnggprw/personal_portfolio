@@ -34,52 +34,41 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
+
+  final GlobalKey aboutMeKey = GlobalKey();
+  final GlobalKey projectsKey = GlobalKey();
+  final GlobalKey contactKey = GlobalKey();
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    _scrollToSection(index);
-  }
 
-  void _scrollToSection(int index) {
-    double offset = index * MediaQuery.of(context).size.height;
-    _scrollController.animateTo(
-      offset,
+    final targetKey = [aboutMeKey, projectsKey, contactKey][index];
+    Scrollable.ensureVisible(
+      targetKey.currentContext!,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
   }
-
-  final List<Widget> _pages = const [
-    AboutMePage(),
-    ProjectsPage(),
-    ContactInfoPage(),
-  ];
 
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = MediaQuery.of(context).size.width > 800;
 
     return Scaffold(
-      drawer: isDesktop ? null : const DrawerMenu(),
-      body: Row(
-        children: [
-          if (isDesktop)
-            NavigationRailMenu(
-              selectedIndex: _selectedIndex,
-              onDestinationSelected: _onItemTapped,
-            ),
-          Expanded(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                children: _pages,
-              ),
-            ),
-          ),
-        ],
+      drawer: isDesktop ? null : DrawerMenu(onItemTapped: _onItemTapped),
+      body: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          children: [
+            SectionContainer(key: aboutMeKey, child: const AboutMePage()),
+            SectionContainer(key: projectsKey, child: const ProjectsPage()),
+            SectionContainer(key: contactKey, child: const ContactInfoPage()),
+          ],
+        ),
       ),
       bottomNavigationBar: isDesktop
           ? null
@@ -91,8 +80,24 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class SectionContainer extends StatelessWidget {
+  final Widget child;
+
+  const SectionContainer({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0),
+      child: child,
+    );
+  }
+}
+
 class DrawerMenu extends StatelessWidget {
-  const DrawerMenu({super.key});
+  final Function(int) onItemTapped;
+
+  const DrawerMenu({super.key, required this.onItemTapped});
 
   @override
   Widget build(BuildContext context) {
@@ -107,41 +112,20 @@ class DrawerMenu extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text('About Me'),
-            onTap: () => Navigator.pop(context),
+            onTap: () => onItemTapped(0),
           ),
           ListTile(
             leading: const Icon(Icons.work),
             title: const Text('Projects'),
-            onTap: () => Navigator.pop(context),
+            onTap: () => onItemTapped(1),
           ),
           ListTile(
             leading: const Icon(Icons.contact_mail),
             title: const Text('Contact Info'),
-            onTap: () => Navigator.pop(context),
+            onTap: () => onItemTapped(2),
           ),
         ],
       ),
-    );
-  }
-}
-
-class NavigationRailMenu extends StatelessWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onDestinationSelected;
-
-  const NavigationRailMenu({super.key, required this.selectedIndex, required this.onDestinationSelected});
-
-  @override
-  Widget build(BuildContext context) {
-    return NavigationRail(
-      selectedIndex: selectedIndex,
-      onDestinationSelected: onDestinationSelected,
-      labelType: NavigationRailLabelType.all,
-      destinations: const [
-        NavigationRailDestination(icon: Icon(Icons.person), label: Text('About Me')),
-        NavigationRailDestination(icon: Icon(Icons.work), label: Text('Projects')),
-        NavigationRailDestination(icon: Icon(Icons.contact_mail), label: Text('Contact Info')),
-      ],
     );
   }
 }
@@ -151,29 +135,26 @@ class AboutMePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const CircleAvatar(
-                radius: 60,
-                backgroundImage: AssetImage('assets/profile.jpg'),
-              ),
-              const SizedBox(height: 20),
-              Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
-              const SizedBox(height: 10),
-              const Text(
-                'I am a passionate developer eager to share my projects and journey with you.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
-              ),
-            ],
-          ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const CircleAvatar(
+              radius: 60,
+              backgroundImage: AssetImage('assets/profile.jpg'),
+            ),
+            const SizedBox(height: 20),
+            Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
+            const SizedBox(height: 10),
+            const Text(
+              "Hi! I'm a passionate developer who loves creating amazing applications. Explore my projects and feel free to reach out! This portfolio showcases my work and interests.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
         ),
       ),
     );
@@ -185,35 +166,55 @@ class ProjectsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
+    return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : MediaQuery.of(context).size.width > 500 ? 2 : 1,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 1.2,
-          ),
-          itemCount: 6,
-          itemBuilder: (context, index) {
-            return Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Project ${index + 1}', style: Theme.of(context).textTheme.headlineSmall),
-                    const SizedBox(height: 8),
-                    const Text('Description of the project goes here. Highlight key features and technologies used.'),
-                  ],
-                ),
-              ),
-            );
-          },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('My Projects', style: Theme.of(context).textTheme.headlineLarge),
+            const SizedBox(height: 20),
+            GridView.count(
+              crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : 1,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              children: const [
+                ProjectCard(title: 'Chat App', description: 'A real-time chat app with secure messaging and user-friendly interface.'),
+                ProjectCard(title: 'AI Image Generator', description: 'Generate stunning images based on text prompts using AI.'),
+                ProjectCard(title: 'TV Show Scheduler App', description: 'Track and schedule your favorite TV shows easily.'),
+                ProjectCard(title: 'Map App', description: 'Interactive map application with custom pins and navigation.'),
+                ProjectCard(title: 'Employee Management App', description: 'Manage employee data, schedules, and tasks efficiently.'),
+                ProjectCard(title: 'AI Assistant App', description: 'Virtual assistant for task automation and quick answers.'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProjectCard extends StatelessWidget {
+  final String title;
+  final String description;
+
+  const ProjectCard({super.key, required this.title, required this.description});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Text(description, style: const TextStyle(fontSize: 16)),
+          ],
         ),
       ),
     );
@@ -225,20 +226,16 @@ class ContactInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Get in touch with me!', style: Theme.of(context).textTheme.headlineLarge),
-              const SizedBox(height: 10),
-              const Text('Email: example@email.com'),
-              const Text('LinkedIn: linkedin.com/in/example'),
-            ],
-          ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Contact Me', style: Theme.of(context).textTheme.headlineLarge),
+            const SizedBox(height: 10),
+            const Text('Get in touch with me at: example@email.com', style: TextStyle(fontSize: 18)),
+          ],
         ),
       ),
     );
