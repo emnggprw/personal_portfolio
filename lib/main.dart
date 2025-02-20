@@ -12,11 +12,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Portfolio App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurpleAccent, brightness: Brightness.dark),
         useMaterial3: true,
         textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          bodyMedium: TextStyle(fontSize: 16, color: Colors.black87),
+          headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+          bodyMedium: TextStyle(fontSize: 16, color: Colors.white70),
         ),
       ),
       home: const HomePage(),
@@ -34,41 +35,46 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
-    AboutMeContent(),
-    ProjectsContent(),
-    ContactInfoContent(),
-  ];
-
-  void _onNavItemTapped(int index) {
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
+  final List<Widget> _pages = const [
+    AboutMePage(),
+    ProjectsPage(),
+    ContactInfoPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = MediaQuery.of(context).size.width > 800;
 
     return Scaffold(
-      drawer: isDesktop ? null : DrawerMenu(onItemTapped: _onNavItemTapped),
+      drawer: isDesktop ? null : const DrawerMenu(),
       body: Row(
         children: [
-          if (isDesktop) NavigationRailMenu(selectedIndex: _selectedIndex, onItemTapped: _onNavItemTapped),
+          if (isDesktop)
+            NavigationRailMenu(
+              selectedIndex: _selectedIndex,
+              onDestinationSelected: _onItemTapped,
+            ),
           Expanded(child: _pages[_selectedIndex]),
         ],
       ),
       bottomNavigationBar: isDesktop
           ? null
-          : BottomNavBar(selectedIndex: _selectedIndex, onItemTapped: _onNavItemTapped),
+          : BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
+      ),
     );
   }
 }
 
 class DrawerMenu extends StatelessWidget {
-  final Function(int) onItemTapped;
-
-  const DrawerMenu({super.key, required this.onItemTapped});
+  const DrawerMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,32 +83,23 @@ class DrawerMenu extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blueAccent),
+            decoration: BoxDecoration(color: Colors.deepPurpleAccent),
             child: const Text('Menu', style: TextStyle(color: Colors.white, fontSize: 24)),
           ),
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text('About Me'),
-            onTap: () {
-              onItemTapped(0);
-              Navigator.pop(context);
-            },
+            onTap: () => Navigator.pop(context),
           ),
           ListTile(
             leading: const Icon(Icons.work),
             title: const Text('Projects'),
-            onTap: () {
-              onItemTapped(1);
-              Navigator.pop(context);
-            },
+            onTap: () => Navigator.pop(context),
           ),
           ListTile(
             leading: const Icon(Icons.contact_mail),
             title: const Text('Contact Info'),
-            onTap: () {
-              onItemTapped(2);
-              Navigator.pop(context);
-            },
+            onTap: () => Navigator.pop(context),
           ),
         ],
       ),
@@ -112,15 +109,15 @@ class DrawerMenu extends StatelessWidget {
 
 class NavigationRailMenu extends StatelessWidget {
   final int selectedIndex;
-  final Function(int) onItemTapped;
+  final ValueChanged<int> onDestinationSelected;
 
-  const NavigationRailMenu({super.key, required this.selectedIndex, required this.onItemTapped});
+  const NavigationRailMenu({super.key, required this.selectedIndex, required this.onDestinationSelected});
 
   @override
   Widget build(BuildContext context) {
     return NavigationRail(
       selectedIndex: selectedIndex,
-      onDestinationSelected: onItemTapped,
+      onDestinationSelected: onDestinationSelected,
       labelType: NavigationRailLabelType.all,
       destinations: const [
         NavigationRailDestination(icon: Icon(Icons.person), label: Text('About Me')),
@@ -131,8 +128,8 @@ class NavigationRailMenu extends StatelessWidget {
   }
 }
 
-class AboutMeContent extends StatelessWidget {
-  const AboutMeContent({super.key});
+class AboutMePage extends StatelessWidget {
+  const AboutMePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -148,10 +145,10 @@ class AboutMeContent extends StatelessWidget {
               backgroundImage: AssetImage('assets/profile.jpg'),
             ),
             const SizedBox(height: 20),
-            Text('About Me', style: Theme.of(context).textTheme.headlineLarge),
+            Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
             const SizedBox(height: 10),
             const Text(
-              'Hello! I\'m a passionate developer with a strong interest in building amazing applications. This portfolio showcases my work and skills.',
+              'I am a passionate developer eager to share my projects and journey with you.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 18),
             ),
@@ -162,46 +159,31 @@ class AboutMeContent extends StatelessWidget {
   }
 }
 
-class ProjectsContent extends StatelessWidget {
-  const ProjectsContent({super.key});
+class ProjectsPage extends StatelessWidget {
+  const ProjectsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Text('Here are some of my projects!', style: Theme.of(context).textTheme.headlineLarge),
-      ),
+      child: Text('Here are some of my projects.', style: Theme.of(context).textTheme.headlineLarge),
     );
   }
 }
 
-class ContactInfoContent extends StatelessWidget {
-  const ContactInfoContent({super.key});
+class ContactInfoPage extends StatelessWidget {
+  const ContactInfoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Contact Info', style: Theme.of(context).textTheme.headlineLarge),
-            const SizedBox(height: 10),
-            const Text('Email: example@email.com'),
-            const Text('Phone: +123 456 7890'),
-            const Text('LinkedIn: linkedin.com/in/yourprofile'),
-          ],
-        ),
-      ),
+      child: Text('Get in touch with me at: example@email.com', style: Theme.of(context).textTheme.headlineLarge),
     );
   }
 }
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
-  final Function(int) onItemTapped;
+  final ValueChanged<int> onItemTapped;
 
   const BottomNavBar({super.key, required this.selectedIndex, required this.onItemTapped});
 
