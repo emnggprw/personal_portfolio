@@ -164,8 +164,48 @@ class ProjectsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Here are some of my projects.', style: Theme.of(context).textTheme.headlineLarge),
+    final List<Map<String, String>> projects = [
+      {'title': 'Project 1', 'description': 'Description for project 1.'},
+      {'title': 'Project 2', 'description': 'Description for project 2.'},
+      {'title': 'Project 3', 'description': 'Description for project 3.'},
+      {'title': 'Project 4', 'description': 'Description for project 4.'},
+      {'title': 'Project 5', 'description': 'Description for project 5.'},
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 1.5,
+        ),
+        itemCount: projects.length,
+        itemBuilder: (context, index) {
+          final project = projects[index];
+          return Card(
+            color: Colors.deepPurple[700],
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    project['title']!,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    project['description']!,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
