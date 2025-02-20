@@ -33,19 +33,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey aboutKey = GlobalKey();
+  final GlobalKey projectsKey = GlobalKey();
+  final GlobalKey contactKey = GlobalKey();
+
+  void _scrollToSection(GlobalKey key) {
+    Scrollable.ensureVisible(
+      key.currentContext!,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeInOut,
+    );
+  }
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    switch (index) {
+      case 0:
+        _scrollToSection(aboutKey);
+        break;
+      case 1:
+        _scrollToSection(projectsKey);
+        break;
+      case 2:
+        _scrollToSection(contactKey);
+        break;
+    }
   }
-
-  final List<Widget> _pages = const [
-    AboutMePage(),
-    ProjectsPage(),
-    ContactInfoPage(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +78,18 @@ class _HomePageState extends State<HomePage> {
               selectedIndex: _selectedIndex,
               onDestinationSelected: _onItemTapped,
             ),
-          Expanded(child: _pages[_selectedIndex]),
+          Expanded(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  AboutMePage(key: aboutKey),
+                  ProjectsPage(key: projectsKey),
+                  ContactInfoPage(key: contactKey),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: isDesktop
@@ -133,27 +162,25 @@ class AboutMePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const CircleAvatar(
-              radius: 60,
-              backgroundImage: AssetImage('assets/profile.jpg'),
-            ),
-            const SizedBox(height: 20),
-            Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
-            const SizedBox(height: 10),
-            const Text(
-              'I am a passionate developer eager to share my projects and journey with you.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const CircleAvatar(
+            radius: 60,
+            backgroundImage: AssetImage('assets/profile.jpg'),
+          ),
+          const SizedBox(height: 20),
+          Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
+          const SizedBox(height: 10),
+          const Text(
+            'I am a passionate developer eager to share my projects and journey with you.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
+          ),
+        ],
       ),
     );
   }
@@ -164,47 +191,41 @@ class ProjectsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> projects = [
-      {'title': 'Project 1', 'description': 'Description for project 1.'},
-      {'title': 'Project 2', 'description': 'Description for project 2.'},
-      {'title': 'Project 3', 'description': 'Description for project 3.'},
-      {'title': 'Project 4', 'description': 'Description for project 4.'},
-      {'title': 'Project 5', 'description': 'Description for project 5.'},
-    ];
-
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 1.5,
-        ),
-        itemCount: projects.length,
-        itemBuilder: (context, index) {
-          final project = projects[index];
-          return Card(
-            color: Colors.deepPurple[700],
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    project['title']!,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    project['description']!,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
+      child: Column(
+        children: [
+          Text('My Projects', style: Theme.of(context).textTheme.headlineLarge),
+          const SizedBox(height: 20),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              childAspectRatio: 3,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
             ),
-          );
-        },
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Project ${index + 1}',
+                          style: Theme.of(context).textTheme.headlineSmall),
+                      const SizedBox(height: 10),
+                      const Text('Description of the project goes here.'),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -215,8 +236,18 @@ class ContactInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Get in touch with me at: example@email.com', style: Theme.of(context).textTheme.headlineLarge),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Contact Me', style: Theme.of(context).textTheme.headlineLarge),
+          const SizedBox(height: 10),
+          const Text('Get in touch with me at: example@email.com',
+              style: TextStyle(fontSize: 18)),
+        ],
+      ),
     );
   }
 }
