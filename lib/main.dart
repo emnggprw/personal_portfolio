@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,6 +52,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  final List<Widget> _pages = const [
+    AboutMePage(),
+    ProjectsPage(),
+    ContactInfoPage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = MediaQuery.of(context).size.width > 800;
@@ -70,11 +75,7 @@ class _HomePageState extends State<HomePage> {
             child: SingleChildScrollView(
               controller: _scrollController,
               child: Column(
-                children: const [
-                  AboutMePage(),
-                  ProjectsPage(),
-                  ContactInfoPage(),
-                ],
+                children: _pages,
               ),
             ),
           ),
@@ -150,26 +151,30 @@ class AboutMePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const CircleAvatar(
-            radius: 60,
-            backgroundImage: AssetImage('assets/profile.jpg'),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const CircleAvatar(
+                radius: 60,
+                backgroundImage: AssetImage('assets/profile.jpg'),
+              ),
+              const SizedBox(height: 20),
+              Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
+              const SizedBox(height: 10),
+              const Text(
+                'I am a passionate developer eager to share my projects and journey with you.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
-          const SizedBox(height: 10),
-          const Text(
-            "Hi! I'm a passionate developer who loves creating amazing applications. Explore my projects and feel free to reach out!",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -180,40 +185,36 @@ class ProjectsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('My Projects', style: Theme.of(context).textTheme.headlineLarge),
-          const SizedBox(height: 20),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : 1,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              children: List.generate(5, (index) {
-                return Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Project ${index + 1}',
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 10),
-                        const Text('This is a brief description of the project.'),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-            ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : MediaQuery.of(context).size.width > 500 ? 2 : 1,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: 1.2,
           ),
-        ],
+          itemCount: 6,
+          itemBuilder: (context, index) {
+            return Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Project ${index + 1}', style: Theme.of(context).textTheme.headlineSmall),
+                    const SizedBox(height: 8),
+                    const Text('Description of the project goes here. Highlight key features and technologies used.'),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -224,18 +225,20 @@ class ContactInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.all(16.0),
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Contact Info', style: Theme.of(context).textTheme.headlineLarge),
-            const SizedBox(height: 10),
-            const Text('Get in touch with me at: example@email.com',
-                style: TextStyle(fontSize: 18)),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Get in touch with me!', style: Theme.of(context).textTheme.headlineLarge),
+              const SizedBox(height: 10),
+              const Text('Email: example@email.com'),
+              const Text('LinkedIn: linkedin.com/in/example'),
+            ],
+          ),
         ),
       ),
     );
