@@ -170,42 +170,44 @@ class ProjectsPage extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('My Projects', style: Theme.of(context).textTheme.headlineLarge),
-            const SizedBox(height: 20),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                int crossAxisCount = constraints.maxWidth > 1000
-                    ? 3
-                    : constraints.maxWidth > 600
-                    ? 2
-                    : 1;
-                return GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 24,
-                    mainAxisSpacing: 24,
-                    childAspectRatio: 0.85,
-                  ),
-                  itemCount: projects.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final project = projects[index];
-                    return ProjectCard(
-                      title: project['title']!,
-                      description: project['description']!,
-                      assetImagePath: project['assetImagePath']!,
-                      techStack: project['techStack']!,
-                      projectUrl: project['projectUrl']!,
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('My Projects', style: Theme.of(context).textTheme.headlineLarge),
+              const SizedBox(height: 20),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  int crossAxisCount = constraints.maxWidth > 1000
+                      ? 3
+                      : constraints.maxWidth > 600
+                      ? 2
+                      : 1;
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 24,
+                      mainAxisSpacing: 24,
+                      childAspectRatio: 0.85,
+                    ),
+                    itemCount: projects.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final project = projects[index];
+                      return ProjectCard(
+                        title: project['title']!,
+                        description: project['description']!,
+                        assetImagePath: project['assetImagePath']!,
+                        techStack: project['techStack']!,
+                        projectUrl: project['projectUrl']!,
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -277,7 +279,7 @@ class _ProjectCardState extends State<ProjectCard> {
                 const SizedBox(height: 10),
                 Text(widget.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 5),
-                Flexible(
+                Expanded(
                   child: Text(
                     widget.description,
                     style: const TextStyle(fontSize: 16),
@@ -295,7 +297,7 @@ class _ProjectCardState extends State<ProjectCard> {
                   ))
                       .toList(),
                 ),
-                const Spacer(),
+                const SizedBox(height: 10),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
@@ -363,6 +365,7 @@ final List<Map<String, dynamic>> projects = [
     'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
   },
 ];
+
 
 
 
