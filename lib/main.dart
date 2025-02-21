@@ -175,11 +175,11 @@ class ProjectsPage extends StatelessWidget {
             Text('My Projects', style: Theme.of(context).textTheme.headlineLarge),
             const SizedBox(height: 20),
             GridView.count(
-              crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : 1,
+              crossAxisCount: MediaQuery.of(context).size.width > 1100 ? 3 : 1,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+              crossAxisSpacing: 24, // Increased for breathing room
+              mainAxisSpacing: 24,  // Prevent overlap during hover
               children: const [
                 ProjectCard(title: 'Chat App', description: 'A real-time chat app with secure messaging and user-friendly interface.'),
                 ProjectCard(title: 'AI Image Generator', description: 'Generate stunning images based on text prompts using AI.'),
@@ -189,6 +189,7 @@ class ProjectsPage extends StatelessWidget {
                 ProjectCard(title: 'AI Assistant App', description: 'Virtual assistant for task automation and quick answers.'),
               ],
             ),
+
           ],
         ),
       ),
@@ -196,30 +197,51 @@ class ProjectsPage extends StatelessWidget {
   }
 }
 
-class ProjectCard extends StatelessWidget {
+class ProjectCard extends StatefulWidget {
   final String title;
   final String description;
 
   const ProjectCard({super.key, required this.title, required this.description});
 
   @override
+  _ProjectCardState createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends State<ProjectCard> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            Text(description, style: const TextStyle(fontSize: 16)),
-          ],
+        padding: const EdgeInsets.all(8.0), // Ensure space around each card
+        child: AnimatedScale(
+          scale: _isHovered ? 1.05 : 1.0,
+          duration: const Duration(milliseconds: 300),
+          child: Card(
+            clipBehavior: Clip.hardEdge, // Prevent overflow
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: _isHovered ? 12 : 4,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
+                  Text(widget.description, style: const TextStyle(fontSize: 16)),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 }
+
 
 class ContactInfoPage extends StatelessWidget {
   const ContactInfoPage({super.key});
