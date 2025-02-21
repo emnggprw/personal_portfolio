@@ -144,7 +144,7 @@ class AboutMePage extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 60,
-              backgroundImage: AssetImage('assets/profile.jpg'),
+              backgroundImage: AssetImage('assets/images/profile_picture.png'),
             ),
             const SizedBox(height: 20),
             Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
@@ -196,7 +196,7 @@ class ProjectsPage extends StatelessWidget {
                     return ProjectCard(
                       title: project['title']!,
                       description: project['description']!,
-                      imageUrl: project['imageUrl']!,
+                      assetImagePath: project['assetImagePath']!,
                       techStack: project['techStack']!,
                       projectUrl: project['projectUrl']!,
                     );
@@ -214,7 +214,7 @@ class ProjectsPage extends StatelessWidget {
 class ProjectCard extends StatefulWidget {
   final String title;
   final String description;
-  final String imageUrl;
+  final String assetImagePath;
   final List<String> techStack;
   final String projectUrl;
 
@@ -222,7 +222,7 @@ class ProjectCard extends StatefulWidget {
     super.key,
     required this.title,
     required this.description,
-    required this.imageUrl,
+    required this.assetImagePath,
     required this.techStack,
     required this.projectUrl,
   });
@@ -260,8 +260,8 @@ class _ProjectCardState extends State<ProjectCard> {
                 // Project Thumbnail
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    widget.imageUrl,
+                  child: Image.asset(
+                    widget.assetImagePath,
                     height: 150,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -280,7 +280,7 @@ class _ProjectCardState extends State<ProjectCard> {
                   children: widget.techStack
                       .map((tag) => Chip(
                     label: Text(tag),
-                    backgroundColor: Colors.blue.shade100,
+                    backgroundColor: Colors.deepPurpleAccent,
                   ))
                       .toList(),
                 ),
@@ -313,42 +313,42 @@ final List<Map<String, dynamic>> projects = [
   {
     'title': 'Chat App',
     'description': 'A real-time chat app with secure messaging and user-friendly interface.',
-    'imageUrl': 'https://via.placeholder.com/300x150',
+    'assetImagePath': 'assets/images/chat_app.png',
     'techStack': ['Flutter', 'Firebase', 'Dart'],
     'projectUrl': 'https://example.com/chat-app',
   },
   {
     'title': 'AI Image Generator',
     'description': 'Generate stunning images based on text prompts using AI.',
-    'imageUrl': 'https://via.placeholder.com/300x150',
+    'assetImagePath': 'assets/images/ai_image_generator.png',
     'techStack': ['Flutter', 'Python', 'OpenAI API'],
     'projectUrl': 'https://example.com/ai-image-generator',
   },
   {
     'title': 'TV Show Scheduler App',
     'description': 'Track and schedule your favorite TV shows easily.',
-    'imageUrl': 'https://via.placeholder.com/300x150',
+    'assetImagePath': 'assets/images/tv_show_scheduler.png',
     'techStack': ['Flutter', 'REST API', 'SQLite'],
     'projectUrl': 'https://example.com/tv-show-scheduler',
   },
   {
     'title': 'Map App',
     'description': 'Interactive map application with custom pins and navigation.',
-    'imageUrl': 'https://via.placeholder.com/300x150',
+    'assetImagePath': 'assets/images/map_app.png',
     'techStack': ['Flutter', 'Google Maps API'],
     'projectUrl': 'https://example.com/map-app',
   },
   {
     'title': 'Employee Management App',
     'description': 'Manage employee data, schedules, and tasks efficiently.',
-    'imageUrl': 'https://via.placeholder.com/300x150',
+    'assetImagePath': 'assets/images/employee_management.png',
     'techStack': ['Flutter', 'Firebase', 'Cloud Firestore'],
     'projectUrl': 'https://example.com/employee-management-app',
   },
   {
     'title': 'AI Assistant App',
     'description': 'Virtual assistant for task automation and quick answers.',
-    'imageUrl': 'https://via.placeholder.com/300x150',
+    'assetImagePath': 'assets/images/ai_assistant.png',
     'techStack': ['Flutter', 'Dart', 'AI SDK'],
     'projectUrl': 'https://example.com/ai-assistant-app',
   },
