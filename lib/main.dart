@@ -42,6 +42,32 @@ class _HomePageState extends State<HomePage> {
 
   int _selectedIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+
+    // Add a listener to the scroll controller to track scrolling.
+    _scrollController.addListener(() {
+      double aboutMeOffset = aboutMeKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y ?? 0;
+      double projectsOffset = projectsKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y ?? 0;
+      double contactOffset = contactKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y ?? 0;
+
+      if (_scrollController.offset >= contactOffset - 100) {
+        setState(() {
+          _selectedIndex = 2; // Contact
+        });
+      } else if (_scrollController.offset >= projectsOffset - 100) {
+        setState(() {
+          _selectedIndex = 1; // Projects
+        });
+      } else if (_scrollController.offset >= aboutMeOffset - 100) {
+        setState(() {
+          _selectedIndex = 0; // About Me
+        });
+      }
+    });
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -281,7 +307,7 @@ class _ProjectCardState extends State<ProjectCard> {
                 const SizedBox(height: 5),
                 Expanded(
                   child: Text(
-                    widget.description,
+                  widget.description,
                     style: const TextStyle(fontSize: 16),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
@@ -401,11 +427,30 @@ class BottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: selectedIndex,
       onTap: onItemTapped,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'About Me'),
-        BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Projects'),
-        BottomNavigationBarItem(icon: Icon(Icons.contact_mail), label: 'Contact Info'),
+      selectedItemColor: Colors.deepPurpleAccent,  // Color when selected
+      unselectedItemColor: Colors.white70,        // Color when unselected
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'About Me',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.work),
+          label: 'Projects',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.contact_mail),
+          label: 'Contact Info',
+        ),
       ],
+      selectedLabelStyle: TextStyle(
+        fontWeight: FontWeight.bold, // Bold when selected
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontWeight: FontWeight.normal, // Normal when not selected
+      ),
     );
   }
 }
+
+
