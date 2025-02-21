@@ -174,22 +174,36 @@ class ProjectsPage extends StatelessWidget {
           children: [
             Text('My Projects', style: Theme.of(context).textTheme.headlineLarge),
             const SizedBox(height: 20),
-            GridView.count(
-              crossAxisCount: MediaQuery.of(context).size.width > 1100 ? 3 : 1,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 24, // Increased for breathing room
-              mainAxisSpacing: 24,  // Prevent overlap during hover
-              children: const [
-                ProjectCard(title: 'Chat App', description: 'A real-time chat app with secure messaging and user-friendly interface.'),
-                ProjectCard(title: 'AI Image Generator', description: 'Generate stunning images based on text prompts using AI.'),
-                ProjectCard(title: 'TV Show Scheduler App', description: 'Track and schedule your favorite TV shows easily.'),
-                ProjectCard(title: 'Map App', description: 'Interactive map application with custom pins and navigation.'),
-                ProjectCard(title: 'Employee Management App', description: 'Manage employee data, schedules, and tasks efficiently.'),
-                ProjectCard(title: 'AI Assistant App', description: 'Virtual assistant for task automation and quick answers.'),
-              ],
+            LayoutBuilder(
+              builder: (context, constraints) {
+                int crossAxisCount = constraints.maxWidth > 1000
+                    ? 3
+                    : constraints.maxWidth > 600
+                    ? 2
+                    : 1;
+                return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: 24,
+                    mainAxisSpacing: 24,
+                    childAspectRatio: 0.85, // Adjusted for thumbnails and tags
+                  ),
+                  itemCount: projects.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final project = projects[index];
+                    return ProjectCard(
+                      title: project['title']!,
+                      description: project['description']!,
+                      imageUrl: project['imageUrl']!,
+                      techStack: project['techStack']!,
+                      projectUrl: project['projectUrl']!,
+                    );
+                  },
+                );
+              },
             ),
-
           ],
         ),
       ),
@@ -200,8 +214,18 @@ class ProjectsPage extends StatelessWidget {
 class ProjectCard extends StatefulWidget {
   final String title;
   final String description;
+  final String imageUrl;
+  final List<String> techStack;
+  final String projectUrl;
 
-  const ProjectCard({super.key, required this.title, required this.description});
+  const ProjectCard({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.imageUrl,
+    required this.techStack,
+    required this.projectUrl,
+  });
 
   @override
   _ProjectCardState createState() => _ProjectCardState();
@@ -215,32 +239,120 @@ class _ProjectCardState extends State<ProjectCard> {
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0), // Ensure space around each card
-        child: AnimatedScale(
-          scale: _isHovered ? 1.05 : 1.0,
-          duration: const Duration(milliseconds: 300),
-          child: Card(
-            clipBehavior: Clip.hardEdge, // Prevent overflow
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            elevation: _isHovered ? 12 : 4,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(widget.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 10),
-                  Text(widget.description, style: const TextStyle(fontSize: 16)),
-                ],
-              ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        transform: _isHovered
+            ? (Matrix4.identity()..translate(0, -5, 0)..scale(1.05))
+            : Matrix4.identity(),
+        decoration: BoxDecoration(
+          boxShadow: _isHovered
+              ? [BoxShadow(color: Colors.blueAccent.withOpacity(0.4), blurRadius: 20, spreadRadius: 5)]
+              : [],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Project Thumbnail
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    widget.imageUrl,
+                    height: 150,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Project Title
+                Text(widget.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 5),
+                // Project Description
+                Text(widget.description, style: const TextStyle(fontSize: 16)),
+                const SizedBox(height: 10),
+                // Tech Stack Tags
+                Wrap(
+                  spacing: 8.0,
+                  children: widget.techStack
+                      .map((tag) => Chip(
+                    label: Text(tag),
+                    backgroundColor: Colors.blue.shade100,
+                  ))
+                      .toList(),
+                ),
+                const Spacer(),
+                // View Project Button
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: ElevatedButton(
+                    onPressed: () => _launchURL(widget.projectUrl),
+                    child: const Text('View Project'),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
   }
+
+  void _launchURL(String url) {
+    // Dummy function for project link. Replace with actual URL launcher.
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Opening: $url')),
+    );
+  }
 }
+
+final List<Map<String, dynamic>> projects = [
+  {
+    'title': 'Chat App',
+    'description': 'A real-time chat app with secure messaging and user-friendly interface.',
+    'imageUrl': 'https://via.placeholder.com/300x150',
+    'techStack': ['Flutter', 'Firebase', 'Dart'],
+    'projectUrl': 'https://example.com/chat-app',
+  },
+  {
+    'title': 'AI Image Generator',
+    'description': 'Generate stunning images based on text prompts using AI.',
+    'imageUrl': 'https://via.placeholder.com/300x150',
+    'techStack': ['Flutter', 'Python', 'OpenAI API'],
+    'projectUrl': 'https://example.com/ai-image-generator',
+  },
+  {
+    'title': 'TV Show Scheduler App',
+    'description': 'Track and schedule your favorite TV shows easily.',
+    'imageUrl': 'https://via.placeholder.com/300x150',
+    'techStack': ['Flutter', 'REST API', 'SQLite'],
+    'projectUrl': 'https://example.com/tv-show-scheduler',
+  },
+  {
+    'title': 'Map App',
+    'description': 'Interactive map application with custom pins and navigation.',
+    'imageUrl': 'https://via.placeholder.com/300x150',
+    'techStack': ['Flutter', 'Google Maps API'],
+    'projectUrl': 'https://example.com/map-app',
+  },
+  {
+    'title': 'Employee Management App',
+    'description': 'Manage employee data, schedules, and tasks efficiently.',
+    'imageUrl': 'https://via.placeholder.com/300x150',
+    'techStack': ['Flutter', 'Firebase', 'Cloud Firestore'],
+    'projectUrl': 'https://example.com/employee-management-app',
+  },
+  {
+    'title': 'AI Assistant App',
+    'description': 'Virtual assistant for task automation and quick answers.',
+    'imageUrl': 'https://via.placeholder.com/300x150',
+    'techStack': ['Flutter', 'Dart', 'AI SDK'],
+    'projectUrl': 'https://example.com/ai-assistant-app',
+  },
+];
 
 
 class ContactInfoPage extends StatelessWidget {
