@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -186,7 +187,7 @@ class ProjectsPage extends StatelessWidget {
                     crossAxisCount: crossAxisCount,
                     crossAxisSpacing: 24,
                     mainAxisSpacing: 24,
-                    childAspectRatio: 0.85, // Adjusted for thumbnails and tags
+                    childAspectRatio: 0.85,
                   ),
                   itemCount: projects.length,
                   shrinkWrap: true,
@@ -257,35 +258,44 @@ class _ProjectCardState extends State<ProjectCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Project Thumbnail
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    widget.assetImagePath,
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      transform: _isHovered
+                          ? (Matrix4.identity()..scale(1.1))
+                          : Matrix4.identity(),
+                      child: Image.asset(
+                        widget.assetImagePath,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                // Project Title
                 Text(widget.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 5),
-                // Project Description
-                Text(widget.description, style: const TextStyle(fontSize: 16)),
+                Flexible(
+                  child: Text(
+                    widget.description,
+                    style: const TextStyle(fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                  ),
+                ),
                 const SizedBox(height: 10),
-                // Tech Stack Tags
                 Wrap(
                   spacing: 8.0,
                   children: widget.techStack
                       .map((tag) => Chip(
-                    label: Text(tag),
+                    label: Text(tag, style: const TextStyle(fontSize: 12)),
                     backgroundColor: Colors.deepPurpleAccent,
                   ))
                       .toList(),
                 ),
                 const Spacer(),
-                // View Project Button
                 Align(
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
@@ -301,10 +311,10 @@ class _ProjectCardState extends State<ProjectCard> {
     );
   }
 
-  void _launchURL(String url) {
-    // Dummy function for project link. Replace with actual URL launcher.
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Opening: $url')),
+  Future<void> _launchURL(String url, {bool isNewTab = true}) async {
+    await launchUrl(
+      Uri.parse(url),
+      webOnlyWindowName: isNewTab ? '_blank' : '_self',
     );
   }
 }
@@ -315,44 +325,45 @@ final List<Map<String, dynamic>> projects = [
     'description': 'A real-time chat app with secure messaging and user-friendly interface.',
     'assetImagePath': 'assets/images/chat_app.png',
     'techStack': ['Flutter', 'Firebase', 'Dart'],
-    'projectUrl': 'https://example.com/chat-app',
+    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
   },
   {
     'title': 'AI Image Generator',
     'description': 'Generate stunning images based on text prompts using AI.',
     'assetImagePath': 'assets/images/ai_image_generator.png',
     'techStack': ['Flutter', 'Python', 'OpenAI API'],
-    'projectUrl': 'https://example.com/ai-image-generator',
+    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
   },
   {
     'title': 'TV Show Scheduler App',
     'description': 'Track and schedule your favorite TV shows easily.',
     'assetImagePath': 'assets/images/tv_show_scheduler.png',
     'techStack': ['Flutter', 'REST API', 'SQLite'],
-    'projectUrl': 'https://example.com/tv-show-scheduler',
+    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
   },
   {
     'title': 'Map App',
     'description': 'Interactive map application with custom pins and navigation.',
     'assetImagePath': 'assets/images/map_app.png',
     'techStack': ['Flutter', 'Google Maps API'],
-    'projectUrl': 'https://example.com/map-app',
+    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
   },
   {
     'title': 'Employee Management App',
     'description': 'Manage employee data, schedules, and tasks efficiently.',
     'assetImagePath': 'assets/images/employee_management.png',
     'techStack': ['Flutter', 'Firebase', 'Cloud Firestore'],
-    'projectUrl': 'https://example.com/employee-management-app',
+    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
   },
   {
     'title': 'AI Assistant App',
     'description': 'Virtual assistant for task automation and quick answers.',
     'assetImagePath': 'assets/images/ai_assistant.png',
     'techStack': ['Flutter', 'Dart', 'AI SDK'],
-    'projectUrl': 'https://example.com/ai-assistant-app',
+    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
   },
 ];
+
 
 
 class ContactInfoPage extends StatelessWidget {
