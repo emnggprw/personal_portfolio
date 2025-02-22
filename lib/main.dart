@@ -360,7 +360,7 @@ final List<Map<String, dynamic>> projects = [
     'description': 'Generate stunning images based on text prompts using AI.',
     'assetImagePath': 'assets/images/ai_image_generator.png',
     'techStack': ['Flutter', 'Python', 'OpenAI API'],
-    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
+    'projectUrl': 'https://github.com/emnggprw/inkspire',
   },
   {
     'title': 'TV Show Scheduler App',
