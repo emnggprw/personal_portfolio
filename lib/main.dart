@@ -177,7 +177,7 @@ class AboutMePage extends StatelessWidget {
             Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
             const SizedBox(height: 10),
             const Text(
-              "Hi! I'm a passionate developer who loves creating amazing applications. Explore my projects and feel free to reach out! This portfolio showcases my work and interests.",
+              "Hi! I'm a graduate in MSc Data Science with a heavy technical background of BSc Computer Science. I'm a proud and passionate programmer, data visualization enthusiast, and an Android developer.",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 18),
             ),
@@ -408,7 +408,7 @@ class ContactInfoPage extends StatelessWidget {
           children: [
             Text('Contact Me', style: Theme.of(context).textTheme.headlineLarge),
             const SizedBox(height: 10),
-            const Text('Get in touch with me at: example@email.com', style: TextStyle(fontSize: 18)),
+            const Text('Get in touch with me at: eko.mnggprw@gmail.com', style: TextStyle(fontSize: 18)),
           ],
         ),
       ),
