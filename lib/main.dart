@@ -48,25 +48,32 @@ class _HomePageState extends State<HomePage> {
 
     // Add a listener to the scroll controller to track scrolling.
     _scrollController.addListener(() {
+      // Get the vertical offset of the 'About Me' section relative to the screen.
       double aboutMeOffset = aboutMeKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y ?? 0;
+
+      // Get the vertical offset of the 'Projects' section relative to the screen.
       double projectsOffset = projectsKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y ?? 0;
+
+      // Get the vertical offset of the 'Contact' section relative to the screen.
       double contactOffset = contactKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y ?? 0;
 
+      // Update the selected index based on the current scroll position.
       if (_scrollController.offset >= contactOffset - 100) {
         setState(() {
-          _selectedIndex = 2; // Contact
+          _selectedIndex = 2; // Highlight "Contact" when scrolled near its section.
         });
       } else if (_scrollController.offset >= projectsOffset - 100) {
         setState(() {
-          _selectedIndex = 1; // Projects
+          _selectedIndex = 1; // Highlight "Projects" when scrolled near its section.
         });
       } else if (_scrollController.offset >= aboutMeOffset - 100) {
         setState(() {
-          _selectedIndex = 0; // About Me
+          _selectedIndex = 0; // Highlight "About Me" when scrolled near its section.
         });
       }
     });
   }
+
 
   void _onItemTapped(int index) {
     setState(() {
