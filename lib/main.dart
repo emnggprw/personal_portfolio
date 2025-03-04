@@ -388,14 +388,14 @@ final List<Map<String, dynamic>> projects = [
     'description': 'Manage employee data, schedules, and tasks efficiently.',
     'assetImagePath': 'assets/images/employee_management.png',
     'techStack': ['Flutter', 'Firebase', 'Cloud Firestore'],
-    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
+    'projectUrl': 'https://github.com/emnggprw/teamsync',
   },
   {
     'title': 'AI Assistant App',
     'description': 'Virtual assistant for task automation and quick answers.',
     'assetImagePath': 'assets/images/ai_assistant.png',
     'techStack': ['Flutter', 'Dart', 'AI SDK'],
-    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
+    'projectUrl': 'https://github.com/emnggprw/querywiz',
   },
 ];
 
