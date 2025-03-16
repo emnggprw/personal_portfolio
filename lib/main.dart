@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Portfolio App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurpleAccent, brightness: Brightness.dark),
@@ -360,7 +361,7 @@ final List<Map<String, dynamic>> projects = [
     'description': 'A real-time chat app with secure messaging and user-friendly interface.',
     'assetImagePath': 'assets/images/chat_app.png',
     'techStack': ['Flutter', 'Firebase', 'Dart'],
-    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
+    'projectUrl': 'https://github.com/emnggprw/',
   },
   {
     'title': 'AI Image Generator',
@@ -374,14 +375,14 @@ final List<Map<String, dynamic>> projects = [
     'description': 'Track and schedule your favorite TV shows easily.',
     'assetImagePath': 'assets/images/tv_show_scheduler.png',
     'techStack': ['Flutter', 'REST API', 'SQLite'],
-    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
+    'projectUrl': 'https://github.com/emnggprw/',
   },
   {
     'title': 'Map App',
     'description': 'Interactive map application with custom pins and navigation.',
     'assetImagePath': 'assets/images/map_app.png',
     'techStack': ['Flutter', 'Google Maps API'],
-    'projectUrl': 'https://deepai.org/machine-learning-model/text2img',
+    'projectUrl': 'https://github.com/emnggprw/',
   },
   {
     'title': 'Employee Management App',

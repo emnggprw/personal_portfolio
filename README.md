@@ -41,4 +41,4 @@ This project serves as a central hub for all the applications and projects I hav
 For any inquiries, feel free to reach out:
 
 - **Email:** eko.mnggrpw@gmail.com
-- **GitHub:** [Your GitHub](https://github.com/emnggprw)
+- **GitHub:** [emnggprw](https://github.com/emnggprw)
