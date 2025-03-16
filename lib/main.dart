@@ -368,7 +368,7 @@ final List<Map<String, dynamic>> projects = [
     'description': 'Generate stunning images based on text prompts using AI.',
     'assetImagePath': 'assets/images/ai_image_generator.png',
     'techStack': ['Flutter', 'Python', 'OpenAI API'],
-    'projectUrl': 'https://github.com/emnggprw/inkspire',
+    'projectUrl': 'https://github.com/emnggprw/',
   },
   {
     'title': 'TV Show Scheduler App',
@@ -389,14 +389,14 @@ final List<Map<String, dynamic>> projects = [
     'description': 'Manage employee data, schedules, and tasks efficiently.',
     'assetImagePath': 'assets/images/employee_management.png',
     'techStack': ['Flutter', 'Firebase', 'Cloud Firestore'],
-    'projectUrl': 'https://github.com/emnggprw/teamsync',
+    'projectUrl': 'https://github.com/emnggprw/',
   },
   {
     'title': 'AI Assistant App',
     'description': 'Virtual assistant for task automation and quick answers.',
     'assetImagePath': 'assets/images/ai_assistant.png',
     'techStack': ['Flutter', 'Dart', 'AI SDK'],
-    'projectUrl': 'https://github.com/emnggprw/querywiz',
+    'projectUrl': 'https://github.com/emnggprw/',
   },
 ];
 
