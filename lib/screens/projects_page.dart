@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:personal_portfrolio/models/project_card.dart';
+import 'package:personal_portfrolio/utils/constants.dart';
+
+class ProjectsPage extends StatelessWidget {
+  const ProjectsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('My Projects', style: Theme.of(context).textTheme.headlineLarge),
+              const SizedBox(height: 20),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  int crossAxisCount = constraints.maxWidth > 1000
+                      ? 3
+                      : constraints.maxWidth > 600
+                      ? 2
+                      : 1;
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 24,
+                      mainAxisSpacing: 24,
+                      childAspectRatio: 0.85,
+                    ),
+                    itemCount: projects.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final project = projects[index];
+                      return ProjectCard(
+                        title: project['title']!,
+                        description: project['description']!,
+                        assetImagePath: project['assetImagePath']!,
+                        techStack: project['techStack']!,
+                        projectUrl: project['projectUrl']!,
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
