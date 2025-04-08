@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_portfrolio/widgets/animated_header.dart';
 
 class AboutMePage extends StatelessWidget {
   const AboutMePage({super.key});
@@ -16,9 +17,8 @@ class AboutMePage extends StatelessWidget {
               radius: 60,
               backgroundImage: AssetImage('assets/images/profile_picture.png'),
             ),
-            const SizedBox(height: 20),
-            Text('Welcome to My Portfolio!', style: Theme.of(context).textTheme.headlineLarge),
-            const SizedBox(height: 10),
+            const SizedBox(height: 30),
+            const AnimatedHeader('Welcome to My Portfolio!'),
             const Text(
               "Hi! I'm a graduate in MSc Data Science with a heavy technical background of BSc Computer Science. I'm a proud and passionate programmer, data visualization enthusiast, and an Android developer.",
               textAlign: TextAlign.center,

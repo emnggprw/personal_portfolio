@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personal_portfrolio/models/project_card.dart';
 import 'package:personal_portfrolio/utils/constants.dart';
+import 'package:personal_portfrolio/widgets/animated_header.dart';
 
 class ProjectsPage extends StatelessWidget {
   const ProjectsPage({super.key});
@@ -14,8 +15,7 @@ class ProjectsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('My Projects', style: Theme.of(context).textTheme.headlineLarge),
-              const SizedBox(height: 20),
+              const AnimatedHeader('My Projects'),
               LayoutBuilder(
                 builder: (context, constraints) {
                   int crossAxisCount = constraints.maxWidth > 1000
