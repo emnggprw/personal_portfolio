@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:personal_portfrolio/widgets/animated_header.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutMePage extends StatelessWidget {
   const AboutMePage({super.key});
+
+  // Placeholder resume link for now
+  final String _resumeUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+
+  void _launchResume() async {
+    final Uri url = Uri.parse(_resumeUrl);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $_resumeUrl';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +29,27 @@ class AboutMePage extends StatelessWidget {
               radius: 60,
               backgroundImage: AssetImage('assets/images/profile_picture.png'),
             ),
-            const SizedBox(height: 30),
-            const AnimatedHeader('Welcome to My Portfolio!'),
+            const SizedBox(height: 20),
+            Text(
+              'Welcome to My Portfolio!',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            const SizedBox(height: 10),
             const Text(
               "Hi! I'm a graduate in MSc Data Science with a heavy technical background of BSc Computer Science. I'm a proud and passionate programmer, data visualization enthusiast, and an Android developer.",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _launchResume,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurpleAccent,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              ),
+              icon: const Icon(Icons.download),
+              label: const Text('Download Resume'),
             ),
           ],
         ),
