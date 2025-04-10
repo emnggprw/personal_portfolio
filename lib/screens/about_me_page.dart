@@ -41,15 +41,19 @@ class AboutMePage extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: _launchResume,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurpleAccent,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            Tooltip(
+              message: 'Download Resume',
+              waitDuration: const Duration(milliseconds: 300),
+              child: ElevatedButton.icon(
+                onPressed: _launchResume,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurpleAccent,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                icon: const Icon(Icons.download),
+                label: const Text('Download Resume'),
               ),
-              icon: const Icon(Icons.download),
-              label: const Text('Download Resume'),
             ),
           ],
         ),
