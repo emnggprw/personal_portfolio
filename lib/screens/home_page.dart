@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   final GlobalKey contactKey = GlobalKey();
 
   int _selectedIndex = 0;
+  bool _showScrollToTopButton = false;
 
   late AnimationController _animationController;
 
@@ -35,15 +36,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     )..repeat();
 
     _scrollController.addListener(() {
+      double offset = _scrollController.offset;
+      setState(() {
+        _showScrollToTopButton = offset > 300;
+      });
+
       double aboutMeOffset = aboutMeKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y ?? 0;
       double projectsOffset = projectsKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y ?? 0;
       double contactOffset = contactKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y ?? 0;
 
-      if (_scrollController.offset >= contactOffset - 100) {
+      if (offset >= contactOffset - 100) {
         setState(() => _selectedIndex = 2);
-      } else if (_scrollController.offset >= projectsOffset - 100) {
+      } else if (offset >= projectsOffset - 100) {
         setState(() => _selectedIndex = 1);
-      } else if (_scrollController.offset >= aboutMeOffset - 100) {
+      } else if (offset >= aboutMeOffset - 100) {
         setState(() => _selectedIndex = 0);
       }
     });
@@ -52,16 +58,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void dispose() {
     _animationController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   void _onItemTapped(int index) {
     setState(() => _selectedIndex = index);
-
     final targetKey = [aboutMeKey, projectsKey, contactKey][index];
     Scrollable.ensureVisible(
       targetKey.currentContext!,
       duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 600),
       curve: Curves.easeInOut,
     );
   }
@@ -91,6 +105,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 SectionContainer(key: projectsKey, child: const ProjectsPage()),
                 SectionContainer(key: contactKey, child: const ContactInfoPage()),
               ],
+            ),
+          ),
+          // Scroll-to-top button
+          Positioned(
+            right: 16,
+            bottom: 80,
+            child: AnimatedOpacity(
+              opacity: _showScrollToTopButton ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: Visibility(
+                visible: _showScrollToTopButton,
+                child: FloatingActionButton(
+                  onPressed: _scrollToTop,
+                  tooltip: 'Scroll to Top',
+                  backgroundColor: Colors.deepPurpleAccent,
+                  child: const Icon(Icons.arrow_upward),
+                ),
+              ),
             ),
           ),
         ],
