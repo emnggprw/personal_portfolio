@@ -5,7 +5,7 @@ class AboutMePage extends StatelessWidget {
   const AboutMePage({super.key});
 
   // Placeholder resume link for now
-  final String _resumeUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+  final String _resumeUrl = 'https://drive.google.com/file/d/1puPfD8fUyYUawTkj1PapR2zF_9dwrH5a/view?usp=sharing';
 
   void _launchResume() async {
     final Uri url = Uri.parse(_resumeUrl);
