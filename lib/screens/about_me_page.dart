@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class AboutMePage extends StatelessWidget {
   const AboutMePage({super.key});
 
-  // Placeholder resume link for now
   final String _resumeUrl = 'https://drive.google.com/file/d/1puPfD8fUyYUawTkj1PapR2zF_9dwrH5a/view?usp=sharing';
 
   void _launchResume() async {
@@ -30,9 +30,18 @@ class AboutMePage extends StatelessWidget {
               backgroundImage: AssetImage('assets/images/profile_picture.png'),
             ),
             const SizedBox(height: 20),
-            Text(
-              'Welcome to My Portfolio!',
-              style: Theme.of(context).textTheme.headlineLarge,
+            AnimatedTextKit(
+              animatedTexts: [
+                TypewriterAnimatedText(
+                  'Welcome to My Portfolio!',
+                  textStyle: Theme.of(context).textTheme.headlineLarge,
+                  speed: const Duration(milliseconds: 100),
+                ),
+              ],
+              totalRepeatCount: 1,
+              pause: const Duration(milliseconds: 1000),
+              displayFullTextOnTap: true,
+              stopPauseOnTap: true,
             ),
             const SizedBox(height: 10),
             const Text(
