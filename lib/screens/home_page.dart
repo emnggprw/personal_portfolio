@@ -97,14 +97,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               );
             },
           ),
-          SingleChildScrollView(
+          RawScrollbar(
             controller: _scrollController,
-            child: Column(
-              children: [
-                SectionContainer(key: aboutMeKey, child: const AboutMePage()),
-                SectionContainer(key: projectsKey, child: const ProjectsPage()),
-                SectionContainer(key: contactKey, child: const ContactInfoPage()),
-              ],
+            thumbVisibility: true,
+            trackVisibility: true,
+            radius: const Radius.circular(8),
+            thickness: 10,
+            thumbColor: Colors.deepPurpleAccent,
+            trackColor: Colors.deepPurple.shade100.withOpacity(0.3),
+            trackBorderColor: Colors.transparent,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  SectionContainer(key: aboutMeKey, child: const AboutMePage()),
+                  SectionContainer(key: projectsKey, child: const ProjectsPage()),
+                  SectionContainer(key: contactKey, child: const ContactInfoPage()),
+                ],
+              ),
             ),
           ),
           // Scroll-to-top button
