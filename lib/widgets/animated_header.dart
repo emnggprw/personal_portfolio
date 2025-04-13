@@ -32,10 +32,8 @@ class _AnimatedHeaderState extends State<AnimatedHeader> with TickerProviderStat
       duration: const Duration(seconds: 4),
     );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.4),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _entranceController, curve: Curves.easeOutExpo));
+    _slideAnimation = Tween<Offset>(begin: const Offset(0, 0.4), end: Offset.zero)
+        .animate(CurvedAnimation(parent: _entranceController, curve: Curves.easeOutExpo));
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _entranceController, curve: Curves.easeInOut),
@@ -50,7 +48,9 @@ class _AnimatedHeaderState extends State<AnimatedHeader> with TickerProviderStat
     );
 
     _entranceController.forward().whenComplete(() {
-      _idleController.repeat(reverse: true);
+      if (mounted) {
+        _idleController.repeat(reverse: true);
+      }
     });
   }
 

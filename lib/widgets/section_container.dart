@@ -16,12 +16,12 @@ class _SectionContainerState extends State<SectionContainer> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-      key: UniqueKey(),
+      key: Key(widget.child.toString()), // Using a stable key instead of UniqueKey
       onVisibilityChanged: (info) {
         if (info.visibleFraction > 0.1 && !_visible) {
-          setState(() {
-            _visible = true;
-          });
+          _updateVisibility(true);
+        } else if (info.visibleFraction <= 0.1 && _visible) {
+          _updateVisibility(false);
         }
       },
       child: AnimatedOpacity(
@@ -39,5 +39,13 @@ class _SectionContainerState extends State<SectionContainer> with SingleTickerPr
         ),
       ),
     );
+  }
+
+  void _updateVisibility(bool visible) {
+    if (_visible != visible) {
+      setState(() {
+        _visible = visible;
+      });
+    }
   }
 }

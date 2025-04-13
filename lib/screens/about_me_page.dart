@@ -2,10 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
-class AboutMePage extends StatelessWidget {
+class AboutMePage extends StatefulWidget {
   const AboutMePage({super.key});
 
-  final String _resumeUrl = 'https://drive.google.com/file/d/1puPfD8fUyYUawTkj1PapR2zF_9dwrH5a/view?usp=sharing';
+  @override
+  State<AboutMePage> createState() => _AboutMePageState();
+}
+
+class _AboutMePageState extends State<AboutMePage> {
+  static const String _resumeUrl = 'https://drive.google.com/file/d/1puPfD8fUyYUawTkj1PapR2zF_9dwrH5a/view?usp=sharing';
+
+  bool _textAnimationPlayed = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Precache the avatar image to avoid jank when it's first rendered
+    precacheImage(const AssetImage('assets/images/profile_picture.png'), context);
+  }
 
   void _launchResume() async {
     final Uri url = Uri.parse(_resumeUrl);
@@ -18,6 +32,8 @@ class AboutMePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final headlineStyle = Theme.of(context).textTheme.headlineLarge;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -30,19 +46,28 @@ class AboutMePage extends StatelessWidget {
               backgroundImage: AssetImage('assets/images/profile_picture.png'),
             ),
             const SizedBox(height: 20),
-            AnimatedTextKit(
-              animatedTexts: [
-                TypewriterAnimatedText(
-                  'Welcome to My Portfolio!',
-                  textStyle: Theme.of(context).textTheme.headlineLarge,
-                  speed: const Duration(milliseconds: 100),
-                ),
-              ],
-              totalRepeatCount: 1,
-              pause: const Duration(milliseconds: 1000),
-              displayFullTextOnTap: true,
-              stopPauseOnTap: true,
-            ),
+            if (!_textAnimationPlayed)
+              AnimatedTextKit(
+                animatedTexts: [
+                  TypewriterAnimatedText(
+                    'Welcome to My Portfolio!',
+                    textStyle: headlineStyle,
+                    speed: const Duration(milliseconds: 100),
+                  ),
+                ],
+                totalRepeatCount: 1,
+                pause: const Duration(milliseconds: 1000),
+                displayFullTextOnTap: true,
+                stopPauseOnTap: true,
+                onFinished: () {
+                  setState(() => _textAnimationPlayed = true);
+                },
+              )
+            else
+              Text(
+                'Welcome to My Portfolio!',
+                style: headlineStyle,
+              ),
             const SizedBox(height: 10),
             const Text(
               "Hi! I'm a graduate in MSc Data Science with a heavy technical background of BSc Computer Science. I'm a proud and passionate programmer, data visualization enthusiast, and an Android developer.",

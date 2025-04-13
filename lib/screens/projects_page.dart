@@ -8,47 +8,45 @@ class ProjectsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final int crossAxisCount = constraints.maxWidth > 1000
+              ? 3
+              : constraints.maxWidth > 600
+              ? 2
+              : 1;
+
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const AnimatedHeader('My Projects'),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  int crossAxisCount = constraints.maxWidth > 1000
-                      ? 3
-                      : constraints.maxWidth > 600
-                      ? 2
-                      : 1;
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      crossAxisSpacing: 24,
-                      mainAxisSpacing: 24,
-                      childAspectRatio: 0.85,
-                    ),
-                    itemCount: projects.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final project = projects[index];
-                      return ProjectCard(
-                        title: project['title']!,
-                        description: project['description']!,
-                        assetImagePath: project['assetImagePath']!,
-                        techStack: project['techStack']!,
-                        projectUrl: project['projectUrl']!,
-                      );
-                    },
+              const SizedBox(height: 16),
+              GridView.builder(
+                itemCount: projects.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 24,
+                  mainAxisSpacing: 24,
+                  childAspectRatio: 0.85,
+                ),
+                itemBuilder: (context, index) {
+                  final project = projects[index];
+                  return ProjectCard(
+                    title: project['title']!,
+                    description: project['description']!,
+                    assetImagePath: project['assetImagePath']!,
+                    techStack: project['techStack']!,
+                    projectUrl: project['projectUrl']!,
                   );
                 },
               ),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
